@@ -2,115 +2,128 @@
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8">
-  <title>時間之流 - Good Luck Tomato</title>
+  <title>GOOD LUCK TOMATO 抽牌系統</title>
   <style>
     body {
-      background-color: #fef9f7;
       font-family: "Noto Serif TC", serif;
+      background-color: #fffaf8;
       color: #5e0303;
+      margin: 0;
+      padding: 0;
       text-align: center;
     }
     h1 {
-      font-size: 2.5rem;
-      margin-top: 2rem;
+      font-size: 3em;
+      margin-top: 60px;
     }
-    .subtitle {
-      font-size: 1.5rem;
-      margin-bottom: 1rem;
+    .button-container {
+      margin-top: 30px;
     }
-    .card-area {
-      display: flex;
-      justify-content: center;
-      margin-top: 3rem;
-      gap: 1rem;
-    }
-    .card-slot {
-      width: 120px;
-      height: 200px;
-      border: 2px solid #caa27e;
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 2rem;
-      position: relative;
-      background-size: cover;
-      background-position: center;
+    button {
+      font-family: "Noto Serif TC", serif;
+      font-size: 1em;
+      padding: 10px 20px;
+      margin: 10px;
+      border: 1px solid #5e0303;
+      background-color: transparent;
+      color: #5e0303;
       cursor: pointer;
     }
-    .label-row {
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
-      margin-top: 1rem;
-      font-size: 1.5rem;
+    #card-area, #spread-area {
+      display: none;
+      margin-top: 40px;
     }
-    .deck {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
+    .card-back {
       width: 60px;
+      height: 100px;
+      margin: 5px;
+      background-color: #5e0303;
+      display: inline-block;
+      border-radius: 6px;
+      cursor: pointer;
     }
-    .deck.left {
-      left: 2rem;
+    .spread-slot {
+      display: inline-block;
+      width: 100px;
+      height: 160px;
+      border: 2px solid #5e0303;
+      border-radius: 10px;
+      margin: 10px;
+      line-height: 160px;
+      font-size: 2em;
+      vertical-align: top;
+      background-color: #fff;
+      color: #5e0303;
     }
-    .deck.right {
-      right: 2rem;
-    }
-    .card-img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border-radius: 20px;
+    .label-row {
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <h1>時間之流</h1>
-  <div class="subtitle">３６張牌圖示</div>
-
-  <img src="images/back.jpg" class="deck left" alt="deck">
-  <img src="images/back.jpg" class="deck right" alt="deck">
-
-  <div class="card-area" id="cardArea">
-    <div class="card-slot" onclick="drawCard(this, 0)"></div>
-    <div class="card-slot" onclick="drawCard(this, 1)"></div>
-    <div class="card-slot" onclick="drawCard(this, 2)"></div>
-    <div class="card-slot" onclick="drawCard(this, 3)"></div>
+  <div id="home">
+    <h1>GOOD LUCK TOMATO</h1>
+    <p>線上抽牌系統</p>
+    <div class="button-container">
+      <button onclick="goToDraw('timeflow')">時間之流</button>
+      <!-- 可加更多選項 -->
+    </div>
+    <p style="margin-top: 60px; font-size: 0.8em">INSTAGRAM : GOOD LUCK TOMATO</p>
   </div>
 
-  <div class="label-row">
-    <span>過去</span>
-    <span>現在</span>
-    <span>未來</span>
-    <span>心態</span>
+  <div id="card-area">
+    <h2>請從下方選擇 5 張牌</h2>
+    <div id="card-deck"></div>
+  </div>
+
+  <div id="spread-area">
+    <h2>36 張牌圖示</h2>
+    <div id="spread">
+      <div class="spread-slot" id="slot1">1</div>
+      <div class="spread-slot" id="slot2">2</div>
+      <div class="spread-slot" id="slot3">3</div>
+      <div class="spread-slot" id="slot4">4</div>
+      <div class="spread-slot" id="slot5">5</div>
+    </div>
+    <div class="label-row">
+      <span>過</span><span style="margin: 0 50px;">去</span><span style="margin: 0 50px;">現在</span><span style="margin: 0 50px;">未來</span><span style="margin: 0 50px;">心</span><span style="margin: 0 10px;">態</span>
+    </div>
   </div>
 
   <script>
-    const totalCards = 78;
-    const usedIndices = new Set();
+    const deck = [];
+    for (let i = 1; i <= 78; i++) {
+      deck.push({ id: i, reversed: Math.random() > 0.5 });
+    }
+    let selected = [];
 
-    function getRandomCardIndex() {
-      let index;
-      do {
-        index = Math.floor(Math.random() * totalCards) + 1;
-      } while (usedIndices.has(index));
-      usedIndices.add(index);
-      return index;
+    function goToDraw(type) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("card-area").style.display = "block";
+      const container = document.getElementById("card-deck");
+      container.innerHTML = "";
+      deck.forEach(card => {
+        const div = document.createElement("div");
+        div.className = "card-back";
+        div.onclick = () => selectCard(card, div);
+        container.appendChild(div);
+      });
     }
 
-    function drawCard(slot, position) {
-      if (slot.dataset.filled === 'true') return;
-      const cardIndex = getRandomCardIndex();
-      const reversed = Math.random() < 0.5;
-      const cardPath = `images/${cardIndex}.jpg`;
-      const img = document.createElement('img');
-      img.src = cardPath;
-      img.alt = `card ${cardIndex}`;
-      img.className = 'card-img';
-      if (reversed) img.style.transform = 'rotate(180deg)';
-      slot.appendChild(img);
-      slot.dataset.filled = 'true';
+    function selectCard(card, element) {
+      if (selected.length >= 5 || selected.includes(card)) return;
+      selected.push(card);
+      element.style.visibility = "hidden";
+      if (selected.length === 5) showSpread();
+    }
+
+    function showSpread() {
+      document.getElementById("card-area").style.display = "none";
+      document.getElementById("spread-area").style.display = "block";
+      selected.forEach((card, index) => {
+        const slot = document.getElementById(`slot${index + 1}`);
+        slot.innerHTML = `${card.id}${card.reversed ? "<br>逆位" : "<br>正位"}`;
+      });
     }
   </script>
 </body>
