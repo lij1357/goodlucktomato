@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
   <meta charset="UTF-8" />
@@ -40,32 +40,47 @@
     .draw-screen {
       display: none;
     }
-    .card-stack {
-      position: relative;
-      display: inline-block;
-      margin: 1rem auto;
+
+    .card-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      justify-content: center;
+      align-items: center;
     }
-    .card-stack img {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translateX(calc(var(--i) * 6px));
-      z-index: var(--i);
+
+    .card-row {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .card-row img {
       height: 160px;
       cursor: pointer;
+      border-radius: 8px;
+      transition: transform 0.2s;
     }
+
+    .card-row img:hover {
+      transform: scale(1.05);
+    }
+
     .drawn-cards {
       display: flex;
       justify-content: center;
       margin-top: 2rem;
       gap: 2rem;
     }
+
     .drawn-cards img {
       width: 100px;
       height: 160px;
       border: 2px solid #b98c56;
       border-radius: 12px;
     }
+
     .positions {
       margin-top: 1rem;
       display: flex;
@@ -89,8 +104,10 @@
   </div>
 
   <div class="container draw-screen" id="draw">
-    <div class="card-stack" id="cardStack"></div>
-    <div class="card-stack" id="cardStack2"></div>
+    <div class="card-grid">
+      <div class="card-row" id="cardRow1"></div>
+      <div class="card-row" id="cardRow2"></div>
+    </div>
 
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
@@ -114,27 +131,26 @@
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
-      renderCardStacks();
+      renderCardGrid();
     }
 
-    function renderCardStacks() {
-      const stack1 = document.getElementById("cardStack");
-      const stack2 = document.getElementById("cardStack2");
-      stack1.innerHTML = "";
-      stack2.innerHTML = "";
+    function renderCardGrid() {
+      const row1 = document.getElementById("cardRow1");
+      const row2 = document.getElementById("cardRow2");
+      row1.innerHTML = "";
+      row2.innerHTML = "";
 
       for (let i = 0; i < 39; i++) {
-        const card1 = document.createElement("img");
-        card1.src = cardBackURL;
-        card1.style.setProperty("--i", i);
-        card1.onclick = () => drawCard(card1);
-        stack1.appendChild(card1);
-
-        const card2 = document.createElement("img");
-        card2.src = cardBackURL;
-        card2.style.setProperty("--i", i);
-        card2.onclick = () => drawCard(card2);
-        stack2.appendChild(card2);
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.onclick = () => drawCard(card);
+        row1.appendChild(card);
+      }
+      for (let i = 39; i < 78; i++) {
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.onclick = () => drawCard(card);
+        row2.appendChild(card);
       }
     }
 
