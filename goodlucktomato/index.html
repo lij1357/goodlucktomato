@@ -101,17 +101,11 @@
   </div>
 
   <script>
-    const cardBackURL = 'https://raw.githubusercontent.com/goodlucktomato/images/main/card-back-red.png';
+    const cardBackURL = 'https://raw.githubusercontent.com/lij1357/goodlucktomato/main/images/79.png';
 
-    // 僅嵌入前 5 張牌
-    const cardImages = [
-      'https://raw.githubusercontent.com/goodlucktomato/images/main/1.jpg',
-      'https://raw.githubusercontent.com/goodlucktomato/images/main/2.jpg',
-      'https://raw.githubusercontent.com/goodlucktomato/images/main/3.jpg',
-      'https://raw.githubusercontent.com/goodlucktomato/images/main/4.jpg',
-      'https://raw.githubusercontent.com/goodlucktomato/images/main/5.jpg'
-      // 你可以在這裡繼續貼上 6～78.jpg
-    ];
+    const cardImages = Array.from({ length: 78 }, (_, i) =>
+      `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/images/${i + 1}.jpg`
+    );
 
     const drawn = [];
 
@@ -129,7 +123,7 @@
       stack1.innerHTML = "";
       stack2.innerHTML = "";
 
-      for (let i = 0; i < Math.min(39, cardImages.length); i++) {
+      for (let i = 0; i < 39; i++) {
         const card1 = document.createElement("img");
         card1.src = cardBackURL;
         card1.style.setProperty("--i", i);
