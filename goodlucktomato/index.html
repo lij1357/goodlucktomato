@@ -37,30 +37,12 @@
     .draw-screen {
       display: none;
     }
-    .card-row, .overlap-row {
-      display: none;
-    }
-    .card-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 6px;
-      margin-bottom: 2rem;
-    }
-    .card-row img {
-      height: 100px;
-      cursor: pointer;
-      border-radius: 6px;
-      transition: transform 0.2s;
-    }
-    .card-row img:hover {
-      transform: scale(1.05);
-    }
     .drawn-cards {
       display: flex;
       justify-content: center;
       margin-top: 2rem;
       gap: 2rem;
+      flex-wrap: wrap;
     }
     .drawn-cards img {
       width: 100px;
@@ -75,22 +57,27 @@
       gap: 2rem;
       font-size: 1.3rem;
     }
-    .overlap-row {
-      position: relative;
-      width: calc(36 * 20px + 100px);
-      height: 160px;
-      margin: 2rem auto;
+    .overlap-container {
+      width: 100%;
       overflow-x: auto;
     }
+    .overlap-row {
+      display: flex;
+      justify-content: start;
+      position: relative;
+      margin: 2rem auto;
+      width: fit-content;
+    }
     .overlap-row img {
-      position: absolute;
-      top: 0;
+      position: relative;
       left: 0;
-      transform: translateX(calc(var(--i) * 20px));
-      z-index: var(--i);
+      margin-left: -60px;
       height: 160px;
       border-radius: 6px;
       cursor: pointer;
+    }
+    .overlap-row img:first-child {
+      margin-left: 0;
     }
   </style>
 </head>
@@ -104,8 +91,10 @@
   </div>
 
   <div class="container draw-screen" id="draw">
-    <div class="overlap-row" id="cardOverlapRow1"></div>
-    <div class="overlap-row" id="cardOverlapRow2"></div>
+    <div class="overlap-container">
+      <div class="overlap-row" id="cardOverlapRow1"></div>
+      <div class="overlap-row" id="cardOverlapRow2"></div>
+    </div>
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
     <div style="margin-top: 2rem;">
@@ -119,16 +108,14 @@
     const drawn = [];
 
     function goToDraw(type) {
-      document.getElementById("cardOverlapRow1").style.display = "none";
-      document.getElementById("cardOverlapRow2").style.display = "none";
+      document.getElementById("cardOverlapRow1").innerHTML = "";
+      document.getElementById("cardOverlapRow2").innerHTML = "";
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
 
       if (type === 'overlap36') {
-        document.getElementById("cardOverlapRow1").style.display = "block";
-        document.getElementById("cardOverlapRow2").style.display = "block";
         renderOverlapRows();
       }
     }
@@ -136,13 +123,10 @@
     function renderOverlapRows() {
       const row1 = document.getElementById("cardOverlapRow1");
       const row2 = document.getElementById("cardOverlapRow2");
-      row1.innerHTML = "";
-      row2.innerHTML = "";
 
       for (let i = 0; i < 36; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
-        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
         row1.appendChild(card);
       }
@@ -150,7 +134,6 @@
       for (let i = 0; i < 36; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
-        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
         row2.appendChild(card);
       }
