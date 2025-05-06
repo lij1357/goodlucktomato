@@ -41,30 +41,21 @@
       display: none;
     }
 
-    .card-grid {
-      display: flex;
-      flex-direction: column;
-      gap: 2rem;
-      justify-content: center;
-      align-items: center;
+    .card-stack {
+      position: relative;
+      display: inline-block;
+      margin: 2rem auto;
     }
 
-    .card-row {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 10px;
-    }
-
-    .card-row img {
+    .card-stack img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateX(calc(var(--i) * 3px));
+      z-index: var(--i);
       height: 160px;
       cursor: pointer;
-      border-radius: 8px;
-      transition: transform 0.2s;
-    }
-
-    .card-row img:hover {
-      transform: scale(1.05);
+      border-radius: 6px;
     }
 
     .drawn-cards {
@@ -104,10 +95,8 @@
   </div>
 
   <div class="container draw-screen" id="draw">
-    <div class="card-grid">
-      <div class="card-row" id="cardRow1"></div>
-      <div class="card-row" id="cardRow2"></div>
-    </div>
+    <div class="card-stack" id="cardStack1"></div>
+    <div class="card-stack" id="cardStack2"></div>
 
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
@@ -131,26 +120,29 @@
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
-      renderCardGrid();
+      renderCardStacks();
     }
 
-    function renderCardGrid() {
-      const row1 = document.getElementById("cardRow1");
-      const row2 = document.getElementById("cardRow2");
-      row1.innerHTML = "";
-      row2.innerHTML = "";
+    function renderCardStacks() {
+      const stack1 = document.getElementById("cardStack1");
+      const stack2 = document.getElementById("cardStack2");
+      stack1.innerHTML = "";
+      stack2.innerHTML = "";
 
-      for (let i = 0; i < 39; i++) {
+      for (let i = 0; i < 36; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
+        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
-        row1.appendChild(card);
+        stack1.appendChild(card);
       }
-      for (let i = 39; i < 78; i++) {
+
+      for (let i = 0; i < 36; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
+        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
-        row2.appendChild(card);
+        stack2.appendChild(card);
       }
     }
 
