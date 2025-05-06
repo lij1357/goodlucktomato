@@ -1,114 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8" />
-  <title>時間之流｜Good Luck Tomato</title>
+  <meta charset="UTF-8">
+  <title>GOOD LUCK TOMATO</title>
   <style>
     body {
-      background-color: #fef9f7;
-      font-family: "Noto Serif TC", "Times New Roman", serif;
-      color: #5e0303;
+      font-family: "Times New Roman", serif;
+      background-color: #FFFFFF;
+      color: #4D0000;
       text-align: center;
-      padding: 40px;
+      padding: 80px;
     }
-
-    h1, h2 {
-      border: 1px solid #5e0303;
-      display: inline-block;
-      padding: 10px 20px;
-      margin: 10px;
+    h1 {
+      font-size: 60px;
+      margin-bottom: 16px;
     }
-
-    .card-row {
+    h2 {
+      font-size: 24px;
+      margin-bottom: 40px;
+    }
+    .button-grid {
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      margin-top: 30px;
       gap: 20px;
+      margin-bottom: 60px;
     }
-
-    .card {
-      width: 120px;
-      height: 200px;
-      perspective: 1000px;
+    .button-grid button {
+      background-color: transparent;
+      border: 1px solid #5e0303;
+      color: #5e0303;
+      font-family: "SimSun", serif;
+      font-size: 16px;
+      padding: 12px 20px;
+      cursor: pointer;
     }
-
-    .card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      border: 2px solid #5e0303;
-      border-radius: 6px;
-      transition: transform 0.5s;
-    }
-
-    .reversed {
-      transform: rotate(180deg);
-    }
-
-    .labels {
-      display: flex;
-      justify-content: center;
-      margin-top: 15px;
-      gap: 80px;
-      font-size: 1.2em;
-      font-family: "Songti TC", serif;
-    }
-
-    button {
-      margin-top: 30px;
+    .button-grid button:hover {
       background-color: #5e0303;
       color: white;
-      border: none;
-      padding: 10px 20px;
-      font-size: 1.1em;
-      cursor: pointer;
-      border-radius: 4px;
+    }
+    .footer {
+      font-family: "Times New Roman", serif;
+      font-size: 14px;
+      margin-top: 40px;
     }
   </style>
 </head>
 <body>
-  <h1>時間之流</h1>
-  <h2>３６張牌圖示</h2>
-
-  <div class="card-row" id="cardRow"></div>
-
-  <div class="labels">
-    <span>過去</span>
-    <span>現在</span>
-    <span>未來</span>
-    <span>心態</span>
+  <div>
+    <h1>GOOD LUCK TOMATO</h1>
+    <h2>線上抽牌系統</h2>
+    <div class="button-grid">
+      <button onclick="location.href='venus.html'">維納斯排陣</button>
+      <button onclick="location.href='reunion.html'">分手復合</button>
+      <button onclick="location.href='timeline.html'">時間之流</button>
+      <button onclick="location.href='free.html'">無排陣</button>
+      <button onclick="location.href='single.html'">單張牌</button>
+      <button onclick="location.href='random.html'">選擇排陣</button>
+    </div>
+    <div class="footer">
+      INSTAGRAM：GOOD LUCK TOMATO
+    </div>
   </div>
-
-  <button onclick="drawTimeflow()">抽牌</button>
-
-  <script>
-    function drawTimeflow() {
-      const container = document.getElementById("cardRow");
-      container.innerHTML = "";
-
-      const totalCards = 36;
-      const drawn = [];
-
-      for (let i = 0; i < 4; i++) {
-        let index;
-        do {
-          index = Math.floor(Math.random() * totalCards) + 1;
-        } while (drawn.includes(index));
-        drawn.push(index);
-
-        const isReversed = Math.random() < 0.5;
-        const card = document.createElement("div");
-        card.className = "card";
-
-        const img = document.createElement("img");
-        img.src = `images/${index}.jpg`;
-        if (isReversed) img.classList.add("reversed");
-
-        card.appendChild(img);
-        container.appendChild(card);
-      }
-    }
-  </script>
 </body>
 </html>
