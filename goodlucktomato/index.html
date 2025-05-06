@@ -44,6 +44,17 @@
       gap: 2rem;
       flex-wrap: wrap;
     }
+    .card-with-label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .card-label {
+      font-size: 1.2rem;
+      color: #5e0303;
+      font-weight: bold;
+    }
     .drawn-cards img {
       width: 100px;
       height: 160px;
@@ -51,11 +62,7 @@
       border-radius: 12px;
     }
     .positions {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      gap: 2rem;
-      font-size: 1.3rem;
+      display: none;
     }
     .overlap-container {
       width: 100%;
@@ -71,7 +78,7 @@
     .overlap-row img {
       position: relative;
       left: 0;
-      margin-left: -30px;
+      margin-left: -88px;
       height: 160px;
       border-radius: 6px;
       cursor: pointer;
@@ -112,7 +119,6 @@
     const drawn = [];
 
     function goToDraw(type) {
-      // Reset all dynamic areas
       document.getElementById("cardOverlapRow1").innerHTML = "";
       document.getElementById("cardOverlapRow2").innerHTML = "";
       document.getElementById("drawnCards").innerHTML = "";
@@ -121,7 +127,6 @@
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
 
-      // 根據類型決定排法（目前統一為兩列36張橫向堆疊）
       renderOverlapRows();
     }
 
@@ -157,12 +162,25 @@
       } while (drawn.includes(idx));
 
       const isReversed = Math.random() < 0.5;
+
+      const cardBox = document.createElement("div");
+      cardBox.className = "card-with-label";
+
       const drawnImg = document.createElement("img");
       drawnImg.src = cardImages[idx];
       if (isReversed) {
         drawnImg.style.transform = "rotate(180deg)";
       }
-      document.getElementById("drawnCards").appendChild(drawnImg);
+
+      const label = document.createElement("div");
+      label.className = "card-label";
+      const labels = ["過去", "現在", "未來", "心態"];
+      label.textContent = labels[drawn.length];
+
+      cardBox.appendChild(drawnImg);
+      cardBox.appendChild(label);
+
+      document.getElementById("drawnCards").appendChild(cardBox);
       drawn.push(idx);
     }
 
@@ -173,3 +191,4 @@
   </script>
 </body>
 </html>
+
