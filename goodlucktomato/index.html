@@ -25,7 +25,7 @@
       font-size: 1.5rem;
       margin-bottom: 2rem;
     }
-    .menu-btns button {
+    .menu-btns button, .back-btn {
       margin: 0.5rem;
       padding: 0.6rem 1.2rem;
       border: 1px solid #5e0303;
@@ -94,15 +94,22 @@
 
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
+
+    <div style="margin-top: 2rem;">
+      <button class="back-btn" onclick="backToHome()">回首頁</button>
+    </div>
   </div>
 
   <script>
-    const cardBackURL = 'https://raw.githubusercontent.com/goodlucktomato/images/main/card-back-red.png'; // 你紅色背面的卡片圖
+    const cardBackURL = 'https://raw.githubusercontent.com/goodlucktomato/images/main/card-back-red.png';
     const cardImages = Array.from({ length: 78 }, (_, i) => `https://raw.githubusercontent.com/goodlucktomato/images/main/${i + 1}.jpg`);
+    const drawn = [];
 
     function goToDraw(type) {
-     const cardImages = Array.from({ length: 78 }, (_, i) => `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/${i + 1}.jpg`);
-
+      document.getElementById("home").style.display = "none";
+      document.getElementById("draw").style.display = "block";
+      drawn.length = 0; // 清空上次抽的牌
+      document.getElementById("drawnCards").innerHTML = "";
       renderCardStacks();
     }
 
@@ -128,7 +135,6 @@
       }
     }
 
-    const drawn = [];
     function drawCard(cardElement) {
       if (drawn.length >= 4) return;
       cardElement.style.display = "none";
@@ -141,6 +147,11 @@
       }
       document.getElementById("drawnCards").appendChild(drawnImg);
       drawn.push(idx);
+    }
+
+    function backToHome() {
+      document.getElementById("home").style.display = "block";
+      document.getElementById("draw").style.display = "none";
     }
   </script>
 </body>
