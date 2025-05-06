@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
@@ -40,29 +39,23 @@
       display: none;
     }
 
-    .stack-wrapper {
+    .card-row {
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 3rem;
-      margin-top: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 6px;
+      margin-bottom: 2rem;
     }
 
-    .card-stack {
-      position: relative;
-      width: 240px;
-      height: 160px;
-    }
-
-    .card-stack img {
-      position: absolute;
-      left: 0;
-      top: 0;
-      transform: translateX(calc(var(--i) * 3px));
-      z-index: var(--i);
-      height: 160px;
+    .card-row img {
+      height: 100px;
       cursor: pointer;
       border-radius: 6px;
+      transition: transform 0.2s;
+    }
+
+    .card-row img:hover {
+      transform: scale(1.05);
     }
 
     .drawn-cards {
@@ -102,10 +95,8 @@
   </div>
 
   <div class="container draw-screen" id="draw">
-    <div class="stack-wrapper">
-      <div class="card-stack" id="cardStack1"></div>
-      <div class="card-stack" id="cardStack2"></div>
-    </div>
+    <div class="card-row" id="row1"></div>
+    <div class="card-row" id="row2"></div>
 
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
@@ -117,7 +108,6 @@
 
   <script>
     const cardBackURL = 'https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/79.png';
-
     const cardImages = Array.from({ length: 78 }, (_, i) =>
       `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/${i + 1}.jpg`
     );
@@ -129,29 +119,27 @@
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
-      renderCardStacks();
+      renderFlatRows();
     }
 
-    function renderCardStacks() {
-      const stack1 = document.getElementById("cardStack1");
-      const stack2 = document.getElementById("cardStack2");
-      stack1.innerHTML = "";
-      stack2.innerHTML = "";
+    function renderFlatRows() {
+      const row1 = document.getElementById("row1");
+      const row2 = document.getElementById("row2");
+      row1.innerHTML = "";
+      row2.innerHTML = "";
 
       for (let i = 0; i < 36; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
-        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
-        stack1.appendChild(card);
+        row1.appendChild(card);
       }
 
-      for (let i = 0; i < 36; i++) {
+      for (let i = 36; i < 78; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
-        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
-        stack2.appendChild(card);
+        row2.appendChild(card);
       }
     }
 
