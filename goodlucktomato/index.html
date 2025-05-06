@@ -71,8 +71,8 @@
     .overlap-row img {
       position: relative;
       left: 0;
-      margin-left: -100px;
-      height: 140px;
+      margin-left: -60px;
+      height: 160px;
       border-radius: 6px;
       cursor: pointer;
     }
@@ -145,9 +145,17 @@
     }
 
     function drawCard(cardElement) {
-      if (drawn.length >= 4) return;
+      if (drawn.length >= 4) {
+        alert("你已經抽滿 4 張牌了！");
+        return;
+      }
       cardElement.style.display = "none";
-      const idx = Math.floor(Math.random() * cardImages.length);
+
+      let idx;
+      do {
+        idx = Math.floor(Math.random() * cardImages.length);
+      } while (drawn.includes(idx));
+
       const isReversed = Math.random() < 0.5;
       const drawnImg = document.createElement("img");
       drawnImg.src = cardImages[idx];
