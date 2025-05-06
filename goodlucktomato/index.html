@@ -86,7 +86,6 @@
     <div class="title">GOOD LUCK TOMATO</div>
     <div class="subtitle">線上抽牌系統</div>
     <div class="menu-btns">
-      <button onclick="goToDraw('overlap36')">時間之流 </button>
       <button onclick="goToDraw('venus')">維納斯排陣</button>
       <button onclick="goToDraw('ex')">分手復合</button>
       <button onclick="goToDraw('timeline')">時間之流</button>
@@ -122,12 +121,8 @@
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
 
-      if (type === 'overlap36') {
-        renderOverlapRows();
-      } else {
-        // 可以在這裡加其他牌陣的渲染邏輯
-        alert("尚未設定該牌陣：" + type);
-      }
+      // 根據類型決定排法（目前統一為兩列36張橫向堆疊）
+      renderOverlapRows();
     }
 
     function renderOverlapRows() {
