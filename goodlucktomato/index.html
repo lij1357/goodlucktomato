@@ -102,13 +102,23 @@
 
   <script>
     const cardBackURL = 'https://raw.githubusercontent.com/goodlucktomato/images/main/card-back-red.png';
-    const cardImages = Array.from({ length: 78 }, (_, i) => `https://raw.githubusercontent.com/goodlucktomato/images/main/${i + 1}.jpg`);
+
+    // 僅嵌入前 5 張牌
+    const cardImages = [
+      'https://raw.githubusercontent.com/goodlucktomato/images/main/1.jpg',
+      'https://raw.githubusercontent.com/goodlucktomato/images/main/2.jpg',
+      'https://raw.githubusercontent.com/goodlucktomato/images/main/3.jpg',
+      'https://raw.githubusercontent.com/goodlucktomato/images/main/4.jpg',
+      'https://raw.githubusercontent.com/goodlucktomato/images/main/5.jpg'
+      // 你可以在這裡繼續貼上 6～78.jpg
+    ];
+
     const drawn = [];
 
     function goToDraw(type) {
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
-      drawn.length = 0; // 清空上次抽的牌
+      drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
       renderCardStacks();
     }
@@ -119,19 +129,18 @@
       stack1.innerHTML = "";
       stack2.innerHTML = "";
 
-      for (let i = 0; i < 39; i++) {
-        const card = document.createElement("img");
-        card.src = cardBackURL;
-        card.style.setProperty("--i", i);
-        card.onclick = () => drawCard(card);
-        stack1.appendChild(card);
-      }
-      for (let i = 0; i < 39; i++) {
-        const card = document.createElement("img");
-        card.src = cardBackURL;
-        card.style.setProperty("--i", i);
-        card.onclick = () => drawCard(card);
-        stack2.appendChild(card);
+      for (let i = 0; i < Math.min(39, cardImages.length); i++) {
+        const card1 = document.createElement("img");
+        card1.src = cardBackURL;
+        card1.style.setProperty("--i", i);
+        card1.onclick = () => drawCard(card1);
+        stack1.appendChild(card1);
+
+        const card2 = document.createElement("img");
+        card2.src = cardBackURL;
+        card2.style.setProperty("--i", i);
+        card2.onclick = () => drawCard(card2);
+        stack2.appendChild(card2);
       }
     }
 
