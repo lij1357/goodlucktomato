@@ -87,7 +87,12 @@
     <div class="subtitle">線上抽牌系統</div>
     <div class="menu-btns">
       <button onclick="goToDraw('overlap36')">橫向疊牌（36張 x 2列）</button>
+      <button onclick="goToDraw('venus')">維納斯排陣</button>
+      <button onclick="goToDraw('ex')">分手復合</button>
+      <button onclick="goToDraw('timeline')">時間之流</button>
+      <button onclick="goToDraw('free')">無排陣</button>
     </div>
+    <div style="margin-top: 2rem;">INSTAGRAM：GOOD LUCK TOMATO</div>
   </div>
 
   <div class="container draw-screen" id="draw">
@@ -108,15 +113,20 @@
     const drawn = [];
 
     function goToDraw(type) {
+      // Reset all dynamic areas
       document.getElementById("cardOverlapRow1").innerHTML = "";
       document.getElementById("cardOverlapRow2").innerHTML = "";
+      document.getElementById("drawnCards").innerHTML = "";
+      drawn.length = 0;
+
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
-      drawn.length = 0;
-      document.getElementById("drawnCards").innerHTML = "";
 
       if (type === 'overlap36') {
         renderOverlapRows();
+      } else {
+        // 可以在這裡加其他牌陣的渲染邏輯
+        alert("尚未設定該牌陣：" + type);
       }
     }
 
