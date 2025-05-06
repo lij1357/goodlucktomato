@@ -1,66 +1,147 @@
 <!DOCTYPE html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="UTF-8">
-  <title>GOOD LUCK TOMATO</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Good Luck Tomato 線上抽牌</title>
   <style>
     body {
-      font-family: "Times New Roman", serif;
-      background-color: #FFFFFF;
-      color: #4D0000;
-      text-align: center;
-      padding: 80px;
-    }
-    h1 {
-      font-size: 60px;
-      margin-bottom: 16px;
-    }
-    h2 {
-      font-size: 24px;
-      margin-bottom: 40px;
-    }
-    .button-grid {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 20px;
-      margin-bottom: 60px;
-    }
-    .button-grid button {
-      background-color: transparent;
-      border: 1px solid #5e0303;
+      font-family: "Noto Serif TC", serif;
+      background: #fffaf8;
       color: #5e0303;
-      font-family: "SimSun", serif;
-      font-size: 16px;
-      padding: 12px 20px;
+      margin: 0;
+      padding: 0;
+    }
+    .container {
+      padding: 3rem;
+      text-align: center;
+    }
+    .title {
+      font-size: 3rem;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .subtitle {
+      font-size: 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .menu-btns button {
+      margin: 0.5rem;
+      padding: 0.6rem 1.2rem;
+      border: 1px solid #5e0303;
+      background-color: transparent;
+      color: #5e0303;
+      font-family: "Noto Serif TC", serif;
       cursor: pointer;
     }
-    .button-grid button:hover {
-      background-color: #5e0303;
-      color: white;
+    .menu {
+      display: block;
     }
-    .footer {
-      font-family: "Times New Roman", serif;
-      font-size: 14px;
-      margin-top: 40px;
+    .draw-screen {
+      display: none;
+    }
+    .card-stack {
+      position: relative;
+      display: inline-block;
+      margin: 1rem auto;
+    }
+    .card-stack img {
+      position: absolute;
+      left: 0;
+      top: 0;
+      transform: translateX(calc(var(--i) * 6px));
+      z-index: var(--i);
+      height: 160px;
+      cursor: pointer;
+    }
+    .drawn-cards {
+      display: flex;
+      justify-content: center;
+      margin-top: 2rem;
+      gap: 2rem;
+    }
+    .drawn-cards img {
+      width: 100px;
+      height: 160px;
+      border: 2px solid #b98c56;
+      border-radius: 12px;
+    }
+    .positions {
+      margin-top: 1rem;
+      display: flex;
+      justify-content: center;
+      gap: 2rem;
+      font-size: 1.3rem;
     }
   </style>
 </head>
 <body>
-  <div>
-    <h1>GOOD LUCK TOMATO</h1>
-    <h2>線上抽牌系統</h2>
-    <div class="button-grid">
-      <button onclick="location.href='venus.html'">維納斯排陣</button>
-      <button onclick="location.href='reunion.html'">分手復合</button>
-      <button onclick="location.href='timeline.html'">時間之流</button>
-      <button onclick="location.href='free.html'">無排陣</button>
-      <button onclick="location.href='single.html'">單張牌</button>
-      <button onclick="location.href='random.html'">選擇排陣</button>
+  <div class="container menu" id="home">
+    <div class="title">GOOD LUCK TOMATO</div>
+    <div class="subtitle">線上抽牌系統</div>
+    <div class="menu-btns">
+      <button onclick="goToDraw('venus')">維納斯排陣</button>
+      <button onclick="goToDraw('ex')">分手復合</button>
+      <button onclick="goToDraw('timeline')">時間之流</button>
+      <button onclick="goToDraw('free')">無排陣</button>
     </div>
-    <div class="footer">
-      INSTAGRAM：GOOD LUCK TOMATO
-    </div>
+    <div style="margin-top: 2rem;">INSTAGRAM：GOOD LUCK TOMATO</div>
   </div>
+
+  <div class="container draw-screen" id="draw">
+    <div class="card-stack" id="cardStack"></div>
+    <div class="card-stack" id="cardStack2"></div>
+
+    <div class="drawn-cards" id="drawnCards"></div>
+    <div class="positions">過　去　現　在　未　來　心　態</div>
+  </div>
+
+  <script>
+    const cardBackURL = 'https://raw.githubusercontent.com/goodlucktomato/images/main/card-back-red.png'; // 你紅色背面的卡片圖
+    const cardImages = Array.from({ length: 78 }, (_, i) => `https://raw.githubusercontent.com/goodlucktomato/images/main/${i + 1}.jpg`);
+
+    function goToDraw(type) {
+      document.getElementById("home").style.display = "none";
+      document.getElementById("draw").style.display = "block";
+      renderCardStacks();
+    }
+
+    function renderCardStacks() {
+      const stack1 = document.getElementById("cardStack");
+      const stack2 = document.getElementById("cardStack2");
+      stack1.innerHTML = "";
+      stack2.innerHTML = "";
+
+      for (let i = 0; i < 39; i++) {
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.style.setProperty("--i", i);
+        card.onclick = () => drawCard(card);
+        stack1.appendChild(card);
+      }
+      for (let i = 0; i < 39; i++) {
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.style.setProperty("--i", i);
+        card.onclick = () => drawCard(card);
+        stack2.appendChild(card);
+      }
+    }
+
+    const drawn = [];
+    function drawCard(cardElement) {
+      if (drawn.length >= 4) return;
+      cardElement.style.display = "none";
+      const idx = Math.floor(Math.random() * cardImages.length);
+      const isReversed = Math.random() < 0.5;
+      const drawnImg = document.createElement("img");
+      drawnImg.src = cardImages[idx];
+      if (isReversed) {
+        drawnImg.style.transform = "rotate(180deg)";
+      }
+      document.getElementById("drawnCards").appendChild(drawnImg);
+      drawn.push(idx);
+    }
+  </script>
 </body>
 </html>
