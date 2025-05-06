@@ -39,6 +39,10 @@
       display: none;
     }
 
+    .card-row, .overlap-row {
+      display: none; /* 預設先隱藏所有排法容器 */
+    }
+
     .card-row {
       display: flex;
       flex-wrap: wrap;
@@ -79,30 +83,28 @@
       gap: 2rem;
       font-size: 1.3rem;
     }
-    .overlap-row {
-  position: relative;
-  width: calc(36 * 20px + 100px);
-  height: 160px;
-  margin: 2rem auto;
-  overflow-x: auto;
-  white-space: nowrap;
-}
-.overlap-row img {
-  position: absolute;
-  top: 0;
-  left: 0;
-  transform: translateX(calc(var(--i) * 20px));
-  z-index: var(--i);
-  height: 160px;
-  border-radius: 6px;
-  cursor: pointer;
-}
 
+    .overlap-row {
+      position: relative;
+      width: calc(36 * 20px + 100px);
+      height: 160px;
+      margin: 2rem auto;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+    .overlap-row img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      transform: translateX(calc(var(--i) * 20px));
+      z-index: var(--i);
+      height: 160px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
-  <button onclick="goToDraw('overlap36')">橫向疊牌（36張）</button>
-
   <div class="container menu" id="home">
     <div class="title">GOOD LUCK TOMATO</div>
     <div class="subtitle">線上抽牌系統</div>
@@ -111,12 +113,14 @@
       <button onclick="goToDraw('ex')">分手復合</button>
       <button onclick="goToDraw('timeline')">時間之流</button>
       <button onclick="goToDraw('free')">無排陣</button>
+      <button onclick="goToDraw('overlap36')">橫向疊牌（36張 x 2 列）</button>
     </div>
     <div style="margin-top: 2rem;">INSTAGRAM：GOOD LUCK TOMATO</div>
   </div>
 
   <div class="container draw-screen" id="draw">
-  <div class="overlap-row" id="cardOverlapRow"></div>
+    <div class="overlap-row" id="cardOverlapRow1"></div>
+    <div class="overlap-row" id="cardOverlapRow2"></div>
 
     <div class="card-row" id="row1"></div>
     <div class="card-row" id="row2"></div>
@@ -130,19 +134,6 @@
   </div>
 
   <script>
-    function renderOverlapRow() {
-  const row = document.getElementById("cardOverlapRow");
-  row.innerHTML = "";
-
-  for (let i = 0; i < 36; i++) {
-    const card = document.createElement("img");
-    card.src = cardBackURL;
-    card.style.setProperty("--i", i);
-    card.onclick = () => drawCard(card);
-    row.appendChild(card);
-  }
-}
-
     const cardBackURL = 'https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/79.png';
     const cardImages = Array.from({ length: 78 }, (_, i) =>
       `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/${i + 1}.jpg`
@@ -151,15 +142,26 @@
     const drawn = [];
 
     function goToDraw(type) {
-      if (type === 'overlap36') {
-  renderOverlapRow();
-}
+      // 先全部隱藏
+      document.getElementById("row1").style.display = "none";
+      document.getElementById("row2").style.display = "none";
+      document.getElementById("cardOverlapRow1").style.display = "none";
+      document.getElementById("cardOverlapRow2").style.display = "none";
 
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
       document.getElementById("drawnCards").innerHTML = "";
-      renderFlatRows();
+
+      if (type === 'overlap36') {
+        document.getElementById("cardOverlapRow1").style.display = "block";
+        document.getElementById("cardOverlapRow2").style.display = "block";
+        renderOverlapRows();
+      } else {
+        document.getElementById("row1").style.display = "flex";
+        document.getElementById("row2").style.display = "flex";
+        renderFlatRows();
+      }
     }
 
     function renderFlatRows() {
@@ -175,9 +177,32 @@
         row1.appendChild(card);
       }
 
-      for (let i = 36; i < 78; i++) {
+      for (let i = 36; i < 72; i++) {
         const card = document.createElement("img");
         card.src = cardBackURL;
+        card.onclick = () => drawCard(card);
+        row2.appendChild(card);
+      }
+    }
+
+    function renderOverlapRows() {
+      const row1 = document.getElementById("cardOverlapRow1");
+      const row2 = document.getElementById("cardOverlapRow2");
+      row1.innerHTML = "";
+      row2.innerHTML = "";
+
+      for (let i = 0; i < 36; i++) {
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.style.setProperty("--i", i);
+        card.onclick = () => drawCard(card);
+        row1.appendChild(card);
+      }
+
+      for (let i = 0; i < 36; i++) {
+        const card = document.createElement("img");
+        card.src = cardBackURL;
+        card.style.setProperty("--i", i);
         card.onclick = () => drawCard(card);
         row2.appendChild(card);
       }
