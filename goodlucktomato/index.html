@@ -34,15 +34,12 @@
       font-family: "Noto Serif TC", serif;
       cursor: pointer;
     }
-
     .draw-screen {
       display: none;
     }
-
     .card-row, .overlap-row {
-      display: none; /* 預設先隱藏所有排法容器 */
+      display: none;
     }
-
     .card-row {
       display: flex;
       flex-wrap: wrap;
@@ -50,32 +47,27 @@
       gap: 6px;
       margin-bottom: 2rem;
     }
-
     .card-row img {
       height: 100px;
       cursor: pointer;
       border-radius: 6px;
       transition: transform 0.2s;
     }
-
     .card-row img:hover {
       transform: scale(1.05);
     }
-
     .drawn-cards {
       display: flex;
       justify-content: center;
       margin-top: 2rem;
       gap: 2rem;
     }
-
     .drawn-cards img {
       width: 100px;
       height: 160px;
       border: 2px solid #b98c56;
       border-radius: 12px;
     }
-
     .positions {
       margin-top: 1rem;
       display: flex;
@@ -83,14 +75,12 @@
       gap: 2rem;
       font-size: 1.3rem;
     }
-
     .overlap-row {
       position: relative;
       width: calc(36 * 20px + 100px);
       height: 160px;
       margin: 2rem auto;
       overflow-x: auto;
-      white-space: nowrap;
     }
     .overlap-row img {
       position: absolute;
@@ -109,25 +99,15 @@
     <div class="title">GOOD LUCK TOMATO</div>
     <div class="subtitle">線上抽牌系統</div>
     <div class="menu-btns">
-      <button onclick="goToDraw('venus')">維納斯排陣</button>
-      <button onclick="goToDraw('ex')">分手復合</button>
-      <button onclick="goToDraw('timeline')">時間之流</button>
-      <button onclick="goToDraw('free')">無排陣</button>
-      <button onclick="goToDraw('overlap36')">橫向疊牌（36張 x 2 列）</button>
+      <button onclick="goToDraw('overlap36')">橫向疊牌（36張 x 2列）</button>
     </div>
-    <div style="margin-top: 2rem;">INSTAGRAM：GOOD LUCK TOMATO</div>
   </div>
 
   <div class="container draw-screen" id="draw">
     <div class="overlap-row" id="cardOverlapRow1"></div>
     <div class="overlap-row" id="cardOverlapRow2"></div>
-
-    <div class="card-row" id="row1"></div>
-    <div class="card-row" id="row2"></div>
-
     <div class="drawn-cards" id="drawnCards"></div>
     <div class="positions">過　去　現　在　未　來　心　態</div>
-
     <div style="margin-top: 2rem;">
       <button class="back-btn" onclick="backToHome()">回首頁</button>
     </div>
@@ -135,19 +115,12 @@
 
   <script>
     const cardBackURL = 'https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/79.png';
-    const cardImages = Array.from({ length: 78 }, (_, i) =>
-      `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/${i + 1}.jpg`
-    );
-
+    const cardImages = Array.from({ length: 78 }, (_, i) => `https://raw.githubusercontent.com/lij1357/goodlucktomato/main/goodlucktomato/images/${i + 1}.jpg`);
     const drawn = [];
 
     function goToDraw(type) {
-      // 先全部隱藏
-      document.getElementById("row1").style.display = "none";
-      document.getElementById("row2").style.display = "none";
       document.getElementById("cardOverlapRow1").style.display = "none";
       document.getElementById("cardOverlapRow2").style.display = "none";
-
       document.getElementById("home").style.display = "none";
       document.getElementById("draw").style.display = "block";
       drawn.length = 0;
@@ -157,31 +130,6 @@
         document.getElementById("cardOverlapRow1").style.display = "block";
         document.getElementById("cardOverlapRow2").style.display = "block";
         renderOverlapRows();
-      } else {
-        document.getElementById("row1").style.display = "flex";
-        document.getElementById("row2").style.display = "flex";
-        renderFlatRows();
-      }
-    }
-
-    function renderFlatRows() {
-      const row1 = document.getElementById("row1");
-      const row2 = document.getElementById("row2");
-      row1.innerHTML = "";
-      row2.innerHTML = "";
-
-      for (let i = 0; i < 36; i++) {
-        const card = document.createElement("img");
-        card.src = cardBackURL;
-        card.onclick = () => drawCard(card);
-        row1.appendChild(card);
-      }
-
-      for (let i = 36; i < 72; i++) {
-        const card = document.createElement("img");
-        card.src = cardBackURL;
-        card.onclick = () => drawCard(card);
-        row2.appendChild(card);
       }
     }
 
